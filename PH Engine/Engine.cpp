@@ -1721,7 +1721,7 @@ void Engine::render()
 
 
 	PBRShader.use();
-	glm::vec3 lightCol = glm::vec3(255.0f, 255.0f, 255.0f);
+	glm::vec3 lightCol = glm::vec3(178.5f, 127.5f, 51.0f);
 	PBRShader.sendUniformMat4("projection", cameraProjection);
 	PBRShader.sendUniformMat4("view", glm::inverse(_camera->getView()));
 	PBRShader.sendUniformVec3("uCameraPosition", cameraPos);
@@ -1838,63 +1838,63 @@ void Engine::render()
 
 	//Post process draw
 
-	xrayFramebuffer.bind();
-	bloomShader.use();
-	sobelFramebuffer.bindColorAsTexture(0, 29);
-	frameBuffer.bindColorAsTexture(1, 30);
-	sobelFramebuffer.drawFSQ();
-	sobelFramebuffer.unbindTexture(29);
-	frameBuffer.unbindTexture(30);
-	bloomShader.unuse();
-	xrayFramebuffer.unbind();
+	//xrayFramebuffer.bind();
+	//bloomShader.use();
+	//sobelFramebuffer.bindColorAsTexture(0, 29);
+	//frameBuffer.bindColorAsTexture(1, 30);
+	//sobelFramebuffer.drawFSQ();
+	//sobelFramebuffer.unbindTexture(29);
+	//frameBuffer.unbindTexture(30);
+	//bloomShader.unuse();
+	//xrayFramebuffer.unbind();
 
-	frameBuffer.bind();
-	bloomShader.use();
-	xrayFramebuffer.bindColorAsTexture(0, 29);
-	frameBuffer.bindColorAsTexture(0, 30);
-	xrayFramebuffer.drawFSQ();
-	xrayFramebuffer.unbindTexture(29);
-	frameBuffer.unbindTexture(30);
-	bloomShader.unuse();
-	frameBuffer.unbind();
+	//frameBuffer.bind();
+	//bloomShader.use();
+	//xrayFramebuffer.bindColorAsTexture(0, 29);
+	//frameBuffer.bindColorAsTexture(0, 30);
+	//xrayFramebuffer.drawFSQ();
+	//xrayFramebuffer.unbindTexture(29);
+	//frameBuffer.unbindTexture(30);
+	//bloomShader.unuse();
+	//frameBuffer.unbind();
 
 
 
-	pass.use();
-	frameBuffer.bindColorAsTexture(0, 30);
-	postBuffer.drawToPost();
-	frameBuffer.unbindTexture(30);
-	pass.unuse();
+	//pass.use();
+	//frameBuffer.bindColorAsTexture(0, 30);
+	//postBuffer.drawToPost();
+	//frameBuffer.unbindTexture(30);
+	//pass.unuse();
 
-	pass.use();
-	postBuffer.draw(30);
-	pass.unuse();
+	//pass.use();
+	//postBuffer.draw(30);
+	//pass.unuse();
 
-	//Adds bloomMap texture and Framebuffer texture together.
-	frameBuffer.bind();
-	bloomShader.use();
-	bloomFramebuffer.bindColorAsTexture(1, 29);
-	postBuffer.draw(30);
-	bloomFramebuffer.unbindTexture(29);
-	bloomShader.unuse();
-	frameBuffer.unbind();
+	////Adds bloomMap texture and Framebuffer texture together.
+	//frameBuffer.bind();
+	//bloomShader.use();
+	//bloomFramebuffer.bindColorAsTexture(1, 29);
+	//postBuffer.draw(30);
+	//bloomFramebuffer.unbindTexture(29);
+	//bloomShader.unuse();
+	//frameBuffer.unbind();
 
 	//Does brightPass check
 	brightPass.use();
 	postBuffer.draw(30);
 	brightPass.unuse();
 
-	for (int i = 0; i < 15; i++) {
-		bloomBlurX.use();
-		bloomBlurX.sendUniformFloat("width", SCREEN_WIDTH);
-		postBuffer.draw(30);
-		bloomBlurX.unuse();
+	//for (int i = 0; i < 15; i++) {
+	//	bloomBlurX.use();
+	//	bloomBlurX.sendUniformFloat("width", SCREEN_WIDTH);
+	//	postBuffer.draw(30);
+	//	bloomBlurX.unuse();
 
-		bloomBlurY.use();
-		bloomBlurY.sendUniformFloat("height", SCREEN_HEIGHT);
-		postBuffer.draw(30);
-		bloomBlurY.unuse();
-	}
+	//	bloomBlurY.use();
+	//	bloomBlurY.sendUniformFloat("height", SCREEN_HEIGHT);
+	//	postBuffer.draw(30);
+	//	bloomBlurY.unuse();
+	//}
 
 	bloomShader.use();
 	frameBuffer.bindColorAsTexture(0, 30);
@@ -1905,7 +1905,7 @@ void Engine::render()
 
 
 
-	LUT.Bind3D(12);
+	/*LUT.Bind3D(12);
 	LUTShader.use();
 	LUTShader.sendUniformMat4("projection", cameraProjection);
 	LUTShader.sendUniformMat4("view", glm::inverse(_camera->getView()));
@@ -1919,7 +1919,7 @@ void Engine::render()
 	glDisable(GL_DEPTH_TEST);
 	postBuffer.draw(30);
 	LUTShader.unuse();
-	LUT.unbind3D(12);
+	LUT.unbind3D(12);*/
 
 
 	pass.use();
