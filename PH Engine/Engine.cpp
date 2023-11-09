@@ -1513,7 +1513,7 @@ void Engine::render()
 
 
 	glEnable(GL_DEPTH_TEST);
-	
+
 
 	shadowFramebuffer.clear();
 
@@ -1533,7 +1533,7 @@ void Engine::render()
 	depthPass.sendUniformMat4("projection", shadowProjection);
 	depthPass.sendUniformMat4("view", glm::inverse(cameraShadow.getView()));
 
-	
+
 	Tree1.LoadObject(&depthPass);
 	Tree2.LoadObject(&depthPass);
 	Tree3.LoadObject(&depthPass);
@@ -1541,7 +1541,7 @@ void Engine::render()
 	Tree5.LoadObject(&depthPass);
 	Tree6.LoadObject(&depthPass);
 
-	
+
 	Spear1.LoadObject(&depthPass);
 	Spear2.LoadObject(&depthPass);
 	SecondSpear1.LoadObject(&depthPass);
@@ -1670,7 +1670,7 @@ void Engine::render()
 	//glm::vec4 cs = cameraShadow.getLookMatrix()[3];
 	glm::mat4 cameraDirection = glm::inverse(_camera->getView()) * cameraShadow.getView();
 	glm::vec4 cameraV = glm::vec4(cameraDirection[2].x, cameraDirection[2].y, cameraDirection[2].z, cameraDirection[2].w);
-	
+
 
 	sh2.sendUniformMat4("projection", cameraProjection);
 	sh2.sendUniformMat4("view", glm::inverse(_camera->getView()));
@@ -1679,7 +1679,7 @@ void Engine::render()
 	shadowFramebuffer.bindDepthAsTexture(13);
 	////Lights here
 	first.LoadLight(&sh2);
-	//second.LoadLight(&sh2);
+	second.LoadLight(&sh2);
 	//ShadowLight.LoadLight(&sh2);
 	//
 	//
@@ -1693,9 +1693,15 @@ void Engine::render()
 	SecondSpear1.LoadObject(&sh2);
 	SecondSpear2.LoadObject(&sh2);
 	BasePlate.LoadObject(&sh2);
+	Tree1.LoadObject(&sh2);
+	Tree2.LoadObject(&sh2);
+	Tree3.LoadObject(&sh2);
+	Tree4.LoadObject(&sh2);
+	Tree5.LoadObject(&sh2);
+	Tree6.LoadObject(&sh2);
 	//
 	shadowFramebuffer.unbindTexture(13);
-	
+
 	sh2.unuse();
 
 	watershader.use();
@@ -1708,20 +1714,20 @@ void Engine::render()
 
 	first.LoadLight(&watershader);
 	River.LoadObject(&watershader);
-	
-	
+
+
 	waterNorm.Unbind();
-	
+
 	watershader.unuse();
 
-	
+
 	skybox->Bind3D(25);
 	skybox2->Bind3D(26);
 	IBL_Lookup.Bind(27);
 
 
 	PBRShader.use();
-	glm::vec3 lightCol = glm::vec3(178.5f, 127.5f, 51.0f);
+	glm::vec3 lightCol = glm::vec3(255.0f, 255.0f, 255.0f);
 	PBRShader.sendUniformMat4("projection", cameraProjection);
 	PBRShader.sendUniformMat4("view", glm::inverse(_camera->getView()));
 	PBRShader.sendUniformVec3("uCameraPosition", cameraPos);
@@ -1732,12 +1738,12 @@ void Engine::render()
 
 	//testPBR.LoadObject(&PBRShader);
 
-	Tree1.LoadObject(&PBRShader);
-	Tree2.LoadObject(&PBRShader);
-	Tree3.LoadObject(&PBRShader);
-	Tree4.LoadObject(&PBRShader);
-	Tree5.LoadObject(&PBRShader);
-	Tree6.LoadObject(&PBRShader);
+	//Tree1.LoadObject(&PBRShader);
+	//Tree2.LoadObject(&PBRShader);
+	//Tree3.LoadObject(&PBRShader);
+	//Tree4.LoadObject(&PBRShader);
+	//Tree5.LoadObject(&PBRShader);
+	//Tree6.LoadObject(&PBRShader);
 	//Playerone.LoadObject(&PBRShader);
 	//Playertwo.LoadObject(&PBRShader);
 	//center.LoadObject(&PBRShader);
@@ -1838,63 +1844,63 @@ void Engine::render()
 
 	//Post process draw
 
-	//xrayFramebuffer.bind();
-	//bloomShader.use();
-	//sobelFramebuffer.bindColorAsTexture(0, 29);
-	//frameBuffer.bindColorAsTexture(1, 30);
-	//sobelFramebuffer.drawFSQ();
-	//sobelFramebuffer.unbindTexture(29);
-	//frameBuffer.unbindTexture(30);
-	//bloomShader.unuse();
-	//xrayFramebuffer.unbind();
+	xrayFramebuffer.bind();
+	bloomShader.use();
+	sobelFramebuffer.bindColorAsTexture(0, 29);
+	frameBuffer.bindColorAsTexture(1, 30);
+	sobelFramebuffer.drawFSQ();
+	sobelFramebuffer.unbindTexture(29);
+	frameBuffer.unbindTexture(30);
+	bloomShader.unuse();
+	xrayFramebuffer.unbind();
 
-	//frameBuffer.bind();
-	//bloomShader.use();
-	//xrayFramebuffer.bindColorAsTexture(0, 29);
-	//frameBuffer.bindColorAsTexture(0, 30);
-	//xrayFramebuffer.drawFSQ();
-	//xrayFramebuffer.unbindTexture(29);
-	//frameBuffer.unbindTexture(30);
-	//bloomShader.unuse();
-	//frameBuffer.unbind();
+	frameBuffer.bind();
+	bloomShader.use();
+	xrayFramebuffer.bindColorAsTexture(0, 29);
+	frameBuffer.bindColorAsTexture(0, 30);
+	xrayFramebuffer.drawFSQ();
+	xrayFramebuffer.unbindTexture(29);
+	frameBuffer.unbindTexture(30);
+	bloomShader.unuse();
+	frameBuffer.unbind();
 
 
 
-	//pass.use();
-	//frameBuffer.bindColorAsTexture(0, 30);
-	//postBuffer.drawToPost();
-	//frameBuffer.unbindTexture(30);
-	//pass.unuse();
+	pass.use();
+	frameBuffer.bindColorAsTexture(0, 30);
+	postBuffer.drawToPost();
+	frameBuffer.unbindTexture(30);
+	pass.unuse();
 
-	//pass.use();
-	//postBuffer.draw(30);
-	//pass.unuse();
+	pass.use();
+	postBuffer.draw(30);
+	pass.unuse();
 
-	////Adds bloomMap texture and Framebuffer texture together.
-	//frameBuffer.bind();
-	//bloomShader.use();
-	//bloomFramebuffer.bindColorAsTexture(1, 29);
-	//postBuffer.draw(30);
-	//bloomFramebuffer.unbindTexture(29);
-	//bloomShader.unuse();
-	//frameBuffer.unbind();
+	//Adds bloomMap texture and Framebuffer texture together.
+	frameBuffer.bind();
+	bloomShader.use();
+	bloomFramebuffer.bindColorAsTexture(1, 29);
+	postBuffer.draw(30);
+	bloomFramebuffer.unbindTexture(29);
+	bloomShader.unuse();
+	frameBuffer.unbind();
 
 	//Does brightPass check
 	brightPass.use();
 	postBuffer.draw(30);
 	brightPass.unuse();
 
-	//for (int i = 0; i < 15; i++) {
-	//	bloomBlurX.use();
-	//	bloomBlurX.sendUniformFloat("width", SCREEN_WIDTH);
-	//	postBuffer.draw(30);
-	//	bloomBlurX.unuse();
+	for (int i = 0; i < 15; i++) {
+		bloomBlurX.use();
+		bloomBlurX.sendUniformFloat("width", SCREEN_WIDTH);
+		postBuffer.draw(30);
+		bloomBlurX.unuse();
 
-	//	bloomBlurY.use();
-	//	bloomBlurY.sendUniformFloat("height", SCREEN_HEIGHT);
-	//	postBuffer.draw(30);
-	//	bloomBlurY.unuse();
-	//}
+		bloomBlurY.use();
+		bloomBlurY.sendUniformFloat("height", SCREEN_HEIGHT);
+		postBuffer.draw(30);
+		bloomBlurY.unuse();
+	}
 
 	bloomShader.use();
 	frameBuffer.bindColorAsTexture(0, 30);
@@ -1905,7 +1911,7 @@ void Engine::render()
 
 
 
-	/*LUT.Bind3D(12);
+	LUT.Bind3D(12);
 	LUTShader.use();
 	LUTShader.sendUniformMat4("projection", cameraProjection);
 	LUTShader.sendUniformMat4("view", glm::inverse(_camera->getView()));
@@ -1919,7 +1925,7 @@ void Engine::render()
 	glDisable(GL_DEPTH_TEST);
 	postBuffer.draw(30);
 	LUTShader.unuse();
-	LUT.unbind3D(12);*/
+	LUT.unbind3D(12);
 
 
 	pass.use();
@@ -1936,7 +1942,7 @@ void Engine::render()
 	//sh2.unuse();
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-	
+
 	glfwSwapBuffers(glfwGetCurrentContext());
 	glfwPollEvents();
 }
